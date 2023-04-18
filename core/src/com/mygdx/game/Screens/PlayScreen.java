@@ -19,7 +19,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-        img = new Texture("badlogic.jpg");
+        img = new Texture("Player/chicken_front.png");
     }
 
     @Override
