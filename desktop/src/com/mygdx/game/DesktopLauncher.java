@@ -8,8 +8,10 @@ import com.mygdx.game.ChickenGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
+		config.setWindowedMode(1280,  900);
 		config.setForegroundFPS(60);
 		config.setTitle("Recycle Chicken");
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		new Lwjgl3Application(new ChickenGame(), config);
 	}
 }
