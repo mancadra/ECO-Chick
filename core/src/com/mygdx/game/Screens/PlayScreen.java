@@ -102,7 +102,7 @@ public class PlayScreen implements Screen {
 
     @Override
     public void show() {
-        this.chicken = new Chicken(0, 0, new Texture("Player/chicken_front.png"), chickenDownWalkAnimation);
+        this.chicken = new Chicken(0, 0, new Texture("Chicken/sprite_chicken00.png"), chickenDownWalkAnimation);
         chickenTextures = new Texture[4];
         chickenTextures[0] = new Texture("Chicken/sprite_chicken00.png");
         chickenTextures[1] = new Texture("Chicken/sprite_chicken26.png");
