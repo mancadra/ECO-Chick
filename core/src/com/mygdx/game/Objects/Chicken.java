@@ -10,6 +10,9 @@ public class Chicken {
     private float speed;
     private Animation animation;
     public boolean moving;
+    public final int WIDTH = 16;
+    public final int HEIGHT = 28;
+    public Trash currentTrash;
 
     public Chicken(float x, float y, Texture texture, Animation animation){
         this.x = x;

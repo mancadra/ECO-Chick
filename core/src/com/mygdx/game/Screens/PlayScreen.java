@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.ChickenGame;
 import com.mygdx.game.Objects.Chicken;
+import com.mygdx.game.Objects.Trash;
+
+import java.util.ArrayList;
 
 public class PlayScreen implements Screen {
     private ChickenGame game;
@@ -22,21 +25,23 @@ public class PlayScreen implements Screen {
     private OrthographicCamera camera;
     private FitViewport viewport;
     private Animation chickenDownWalkAnimation;
-    private Animation chickenLeftWalkAnimation;
-    private Animation chickenLeftDownWalkAnimation;
-    private Animation chickenLeftUpWalkAnimation;
-    private Animation chickenUpWalkAnimation;
-    private Animation chickenRightUpWalkAnimation;
-    private Animation chickenRightWalkAnimation;
-    private Animation chickenRightDownWalkAnimation;
+    private final Animation chickenLeftWalkAnimation;
+    private final Animation chickenLeftDownWalkAnimation;
+    private final Animation chickenLeftUpWalkAnimation;
+    private final Animation chickenUpWalkAnimation;
+    private final Animation chickenRightUpWalkAnimation;
+    private final Animation chickenRightWalkAnimation;
+    private final Animation chickenRightDownWalkAnimation;
     private float chickenSpriteTime;
+    private ArrayList<Trash> trashArray;
     public PlayScreen(ChickenGame game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
+        this.chicken = new Chicken(0, 0, new Texture("Chicken/sprite_chicken00.png"), chickenDownWalkAnimation);
         this.chickenSpriteTime = 0;
         TextureRegion[] chickenDownRegion = new TextureRegion[4];
         Texture tempSprite = new Texture("Chicken/sprite_chicken_down_run.png");
-        TextureRegion[][] tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        TextureRegion[][] tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenDownRegion[i] = tempFrames[i][0];
         }
@@ -44,7 +49,7 @@ public class PlayScreen implements Screen {
 
         TextureRegion[] chickenLeftDownRegion = new TextureRegion[4];
         tempSprite = new Texture("Chicken/sprite_chicken_left_down_run.png");
-        tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenLeftDownRegion[i] = tempFrames[i][0];
         }
@@ -52,7 +57,7 @@ public class PlayScreen implements Screen {
 
         TextureRegion[] chickenLeftRegion = new TextureRegion[4];
         tempSprite = new Texture("Chicken/sprite_chicken_left_run.png");
-        tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenLeftRegion[i] = tempFrames[i][0];
         }
@@ -60,7 +65,7 @@ public class PlayScreen implements Screen {
 
         TextureRegion[] chickenLeftUpRegion = new TextureRegion[4];
         tempSprite = new Texture("Chicken/sprite_chicken_left_up_run.png");
-        tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenLeftUpRegion[i] = tempFrames[i][0];
         }
@@ -68,7 +73,7 @@ public class PlayScreen implements Screen {
 
         TextureRegion[] chickenUpRegion = new TextureRegion[4];
         tempSprite = new Texture("Chicken/sprite_chicken_up_run.png");
-        tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenUpRegion[i] = tempFrames[i][0];
         }
@@ -76,7 +81,7 @@ public class PlayScreen implements Screen {
 
         TextureRegion[] chickenRightUpRegion = new TextureRegion[4];
         tempSprite = new Texture("Chicken/sprite_chicken_right_up_run.png");
-        tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenRightUpRegion[i] = tempFrames[i][0];
         }
@@ -84,7 +89,7 @@ public class PlayScreen implements Screen {
 
         TextureRegion[] chickenRightRegion = new TextureRegion[4];
         tempSprite = new Texture("Chicken/sprite_chicken_right_run.png");
-        tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenRightRegion[i] = tempFrames[i][0];
         }
@@ -92,17 +97,19 @@ public class PlayScreen implements Screen {
 
         TextureRegion[] chickenRightDownRegion = new TextureRegion[4];
         tempSprite = new Texture("Chicken/sprite_chicken_right_down_run.png");
-        tempFrames = TextureRegion.split(tempSprite, 16, 28);
+        tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
         for(int i=0; i<4; i++){
             chickenRightDownRegion[i] = tempFrames[i][0];
         }
         chickenRightDownWalkAnimation = new Animation(1f/5f, chickenRightDownRegion);
 
+        trashArray = new ArrayList<>();
+        trashArray.add(new Trash(100, 100, 9, 14, new Texture("Trash/sprite_bottle0.png")));
+        trashArray.add(new Trash(200, 100, 9, 14, new Texture("Trash/sprite_bottle0.png")));
     }
 
     @Override
     public void show() {
-        this.chicken = new Chicken(0, 0, new Texture("Chicken/sprite_chicken00.png"), chickenDownWalkAnimation);
         chickenTextures = new Texture[4];
         chickenTextures[0] = new Texture("Chicken/sprite_chicken00.png");
         chickenTextures[1] = new Texture("Chicken/sprite_chicken26.png");
@@ -114,6 +121,8 @@ public class PlayScreen implements Screen {
 
     public void update(float dt){
         this.chickenSpriteTime += dt;
+
+        //input
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             chicken.setTexture(chickenTextures[1]);
             chicken.setAnimation(chickenRightWalkAnimation);
@@ -147,8 +156,17 @@ public class PlayScreen implements Screen {
             chicken.setSpeed(25);
         else
             chicken.setSpeed(15);
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.Q))
             game.dispose();
+
+        //collisions
+        for(int i=0; i<trashArray.size(); i++) {
+            Trash t = trashArray.get(i);
+            if (recOverlap(chicken.getX(), chicken.getY(), chicken.WIDTH, chicken.HEIGHT, t.getX(), t.getY(), t.WIDTH, t.HEIGHT)){
+                chicken.currentTrash = new Trash(t.getX(), t.getY(), t.WIDTH, t.HEIGHT, t.TEXTURE);
+                trashArray.remove(t);
+            }
+        }
     }
 
     @Override
@@ -160,8 +178,17 @@ public class PlayScreen implements Screen {
             batch.draw((TextureRegion) chicken.getAnimation().getKeyFrame(chickenSpriteTime, true), chicken.getX(), chicken.getY());
         else
             batch.draw(chicken.getTexture(), chicken.getX(), chicken.getY());
+        if(chicken.currentTrash != null){
+            batch.draw(chicken.currentTrash.TEXTURE, chicken.getX()+(float)chicken.WIDTH/4, chicken.getY()+20);
+        }
+        for(Trash t : trashArray)
+            batch.draw(t.TEXTURE, t.getX(), t.getY());
         batch.end();
         update(delta);
+    }
+
+    public static boolean recOverlap(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
+        return (x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2);
     }
 
     @Override
