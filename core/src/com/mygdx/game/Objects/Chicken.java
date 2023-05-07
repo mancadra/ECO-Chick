@@ -1,18 +1,23 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 
 public class Chicken {
     private float x;
     private float y;
     private Texture texture;
     private float speed;
+    private Animation animation;
+    public boolean moving;
 
-    public Chicken(float x, float y, Texture texture){
+    public Chicken(float x, float y, Texture texture, Animation animation){
         this.x = x;
         this.y = y;
         this.texture = texture;
+        this.animation = animation;
         this.speed = 15;
+        this.moving = false;
     }
 
     public Chicken(){}
@@ -52,5 +57,13 @@ public class Chicken {
 
     public void setSpeed(float speed) {
         this.speed = speed;
+    }
+
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
     }
 }
