@@ -105,7 +105,7 @@ public class PlayScreen implements Screen {
 
         trashArray = new ArrayList<>();
         trashArray.add(new Trash(100, 100, 9, 14, new Texture("Trash/sprite_bottle0.png")));
-        trashArray.add(new Trash(200, 100, 9, 14, new Texture("Trash/sprite_bottle0.png")));
+        trashArray.add(new Trash(200, 100, 9, 14, new Texture("Trash/sprite_bottle1.png")));
     }
 
     @Override
@@ -179,7 +179,7 @@ public class PlayScreen implements Screen {
         else
             batch.draw(chicken.getTexture(), chicken.getX(), chicken.getY());
         if(chicken.currentTrash != null){
-            batch.draw(chicken.currentTrash.TEXTURE, chicken.getX()+(float)chicken.WIDTH/4, chicken.getY()+20);
+            batch.draw(chicken.currentTrash.TEXTURE, chicken.getX()+chicken.currentTrash.WIDTH/3, chicken.getY()+25);
         }
         for(Trash t : trashArray)
             batch.draw(t.TEXTURE, t.getX(), t.getY());
