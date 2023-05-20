@@ -13,6 +13,10 @@ public class Chicken {
     public final int WIDTH = 16;
     public final int HEIGHT = 28;
     public Trash currentTrash;
+    private float prev_x;
+    private float prev_y;
+    public boolean canPickUp;
+    public float canPickUpTimer;
 
     public Chicken(float x, float y, Texture texture, Animation animation){
         this.x = x;
@@ -21,6 +25,8 @@ public class Chicken {
         this.animation = animation;
         this.speed = 15;
         this.moving = false;
+        this.canPickUp = true;
+        this.canPickUpTimer = 0.0f;
     }
 
     public Chicken(){}
@@ -68,5 +74,21 @@ public class Chicken {
 
     public void setAnimation(Animation animation) {
         this.animation = animation;
+    }
+
+    public float getPrev_x() {
+        return prev_x;
+    }
+
+    public void setPrev_x(float prev_x) {
+        this.prev_x = prev_x;
+    }
+
+    public float getPrev_y() {
+        return prev_y;
+    }
+
+    public void setPrev_y(float prev_y) {
+        this.prev_y = prev_y;
     }
 }
