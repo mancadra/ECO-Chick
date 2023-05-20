@@ -34,7 +34,7 @@
             "scale": 0.565546875,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 555.2148086752313,
+                "x": 553.4466086476033,
                 "y": 208.64760326011879
             }
         },
@@ -78,11 +78,11 @@
             "scaleInEditor": 1
         },
         "map.tmx": {
-            "scale": 1,
+            "scale": 5.5,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 744,
-                "y": 344
+                "x": 724.3636363636364,
+                "y": 542.1818181818182
             }
         },
         "trash01.tsx": {
@@ -116,12 +116,12 @@
     ],
     "project": "map.tiled-project",
     "recentFiles": [
+        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_map01.tmx",
         "trash02.tsx",
         "trash03.tsx",
         "trasshhhhh.tsx",
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/Design/map.tmj",
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/map.tmx",
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_map01.tmx",
         "map.tmx",
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_tileset.tsx",
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/ECO-Chick/assets/ECO_Chick_tileset.tsx",

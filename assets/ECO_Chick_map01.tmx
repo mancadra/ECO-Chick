@@ -3,9 +3,9 @@
  <editorsettings>
   <export target="../../ECO_Chick_map01..tmx" format="tmx"/>
  </editorsettings>
- <tileset firstgid="1" source="ECO_Chick_tileset.tsx"/>
- <tileset firstgid="901" source="../../../../../Projekti/Pokemon JS/kante.tsx"/>
- <tileset firstgid="937" source="../../../../../Projekti/Pokemon JS/trash.tsx"/>
+ <tileset firstgid="1" source="Tiled/base.tsx"/>
+ <tileset firstgid="901" source="Tiled/kante.tsx"/>
+ <tileset firstgid="937" source="Tiled/trash01.tsx"/>
  <layer id="1" name="water" width="70" height="40">
   <data encoding="csv">
 539,569,568,597,567,598,598,598,567,568,598,537,568,597,598,598,567,569,598,537,539,567,598,538,539,538,568,599,537,539,598,597,539,569,598,568,568,567,567,569,569,538,567,538,537,537,537,539,597,539,539,568,597,598,538,568,537,598,569,569,537,597,537,598,597,567,568,569,568,538,
