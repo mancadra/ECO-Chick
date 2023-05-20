@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.ChickenGame;
 import com.mygdx.game.Objects.Chicken;
@@ -34,6 +37,9 @@ public class PlayScreen implements Screen {
     private final Animation chickenRightDownWalkAnimation;
     private float chickenSpriteTime;
     private ArrayList<Trash> trashArray;
+    private TmxMapLoader mapLoader;
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer mapRenderer;
     public PlayScreen(ChickenGame game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
@@ -167,12 +173,17 @@ public class PlayScreen implements Screen {
                 trashArray.remove(t);
             }
         }
+
+        camera.position.x = chicken.getX() + (float)chicken.WIDTH / 2;
+        camera.position.y = chicken.getY() + (float)chicken.HEIGHT / 2;
+        camera.update();
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         if(chicken.moving)
             batch.draw((TextureRegion) chicken.getAnimation().getKeyFrame(chickenSpriteTime, true), chicken.getX(), chicken.getY());
