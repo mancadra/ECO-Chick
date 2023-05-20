@@ -172,8 +172,10 @@ public class PlayScreen implements Screen {
             chicken.setSpeed(35);
         else
             chicken.setSpeed(20);
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE) || Gdx.input.isKeyPressed(Input.Keys.Q))
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            dispose();
             game.dispose();
+        }
 
         //collisions
         for (int i = 0; i < trashArray.size(); i++) {
