@@ -13,7 +13,7 @@ public class ChickenGame extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new PlayScreen(this, batch));
+		setScreen(new MenuScreen(this, batch));
 	}
 
 	@Override
