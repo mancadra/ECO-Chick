@@ -7,12 +7,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.ChickenGame;
 import com.mygdx.game.Objects.Chicken;
+import com.mygdx.game.Objects.Kanta;
 import com.mygdx.game.Objects.Trash;
 
 import java.util.ArrayList;
@@ -34,7 +42,7 @@ public class PlayScreen implements Screen {
     private final Animation chickenRightDownWalkAnimation;
     private float chickenSpriteTime;
     private ArrayList<Trash> trashArray;
-    private Trash[] kante;
+    private Kanta[] kante;
     private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
@@ -42,9 +50,12 @@ public class PlayScreen implements Screen {
     public PlayScreen(ChickenGame game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
-        this.chicken = new Chicken(0, 0, new Texture("Chicken/sprite_chicken00.png"), chickenDownWalkAnimation);
+        this.chicken = new Chicken(500, 300, new Texture("Chicken/sprite_chicken00.png"), chickenDownWalkAnimation);
         this.font = new BitmapFont();
         this.chickenSpriteTime = 0;
+        this.mapLoader = new TmxMapLoader();
+        this.map = mapLoader.load("Tiled/map.tmx");
+        this.mapRenderer = new OrthogonalTiledMapRenderer(map, batch);
         TextureRegion[] chickenDownRegion = new TextureRegion[4];
         Texture tempSprite = new Texture("Chicken/sprite_chicken_down_run.png");
         TextureRegion[][] tempFrames = TextureRegion.split(tempSprite, chicken.WIDTH, chicken.HEIGHT);
@@ -109,18 +120,33 @@ public class PlayScreen implements Screen {
         }
         chickenRightDownWalkAnimation = new Animation(1f/5f, chickenRightDownRegion);
 
-        kante = new Trash[4];
-        kante[0] = new Trash(100, 20, 31, 29, new Texture("Trash/kanta_papir.png"), 0);
-        kante[1] = new Trash(131, 20, 32, 29, new Texture("Trash/kanta_embalaza.png"), 1);
-        kante[2] = new Trash(163, 20, 31, 29, new Texture("Trash/kanta_ostali.png"), 2);
-        kante[3] = new Trash(194, 20, 33, 29, new Texture("Trash/kanta_steklo.png"), 3);
+        kante = new Kanta[4];
+        kante[0] = new Kanta(690, 300, 31, 29, new Texture("Trash/kanta_papir.png"), 0);
+        kante[1] = new Kanta(721, 300, 32, 29, new Texture("Trash/kanta_embalaza.png"), 1);
+        kante[2] = new Kanta(753, 300, 31, 29, new Texture("Trash/kanta_ostali.png"), 2);
+        kante[3] = new Kanta(784, 300, 33, 29, new Texture("Trash/kanta_steklo.png"), 3);
 
-        trashArray = new ArrayList<>();
-        trashArray.add(new Trash(100, 100, 9, 14, new Texture("Trash/bottle_0.png"), 3, "Kozarec za marmelado"));
-        trashArray.add(new Trash(190, 120, 9, 14, new Texture("Trash/bottle_1.png"), 3, "Steklenica vina"));
-        trashArray.add(new Trash(140, 110, 11, 11, new Texture("Trash/paper_0.png"), 0, "Popisan list"));
-        trashArray.add(new Trash(150, 150, 14, 13, new Texture("Trash/bag_0.png"), 1, "Plastična vrečka"));
+        //trashArray.add(new Trash(100, 100, 9, 14, new Texture("Trash/bottle_0.png"), 3, "Kozarec za marmelado"));
+        //trashArray.add(new Trash(190, 120, 9, 14, new Texture("Trash/bottle_1.png"), 3, "Steklenica vina"));
+        //trashArray.add(new Trash(140, 110, 11, 11, new Texture("Trash/paper_0.png"), 0, "Popisan list"));
+        //trashArray.add(new Trash(150, 150, 14, 13, new Texture("Trash/bag_0.png"), 1, "Plastična vrečka"));
 
+    }
+
+    public void addTrashToArray(MapObject obj, int type){
+        MapProperties mp = obj.getProperties();
+        TextureMapObject tmo = null;
+        tmo = (TextureMapObject) obj;
+        trashArray.add(new Trash(
+                mp.get("x", float.class),
+                mp.get("y", float.class),
+                mp.get("width", float.class),
+                mp.get("height", float.class),
+                tmo.getTextureRegion(),
+                type,
+                obj,
+                ""
+        ));
     }
 
     @Override
@@ -131,7 +157,27 @@ public class PlayScreen implements Screen {
         chickenTextures[2] = new Texture("Chicken/sprite_chicken16.png");
         chickenTextures[3] = new Texture("Chicken/sprite_chicken10.png");
         camera = new OrthographicCamera();
-        viewport = new FitViewport(256, 180, camera);
+        viewport = new FitViewport(512, 360, camera);
+        for(MapLayer ml : map.getLayers()){
+            System.out.println(ml.getName());
+        }
+        trashArray = new ArrayList<>();
+        String[] layerNames = {"paperTrash", "plastic Trash", "misc Trash", "glass Trash"};
+
+        for(int i=0; i<layerNames.length; i++){
+            MapObjects layerObjects = map.getLayers().get(layerNames[i]).getObjects();
+            for(MapObject o : layerObjects) {
+                addTrashToArray(o, i);
+            }
+        }
+
+
+        /*for(MapObject obj : layer.getObjects()){
+            System.out.println(obj.getProperties().get("x", float.class));
+            System.out.println(obj.getProperties().get("y", float.class));
+            System.out.println(obj.getProperties().get("width", float.class));
+            System.out.println(obj.getProperties().get("height", float.class));
+        }*/
     }
 
     public void update(float dt){
@@ -178,59 +224,75 @@ public class PlayScreen implements Screen {
         }
 
         //collisions
+        MapLayer layer = map.getLayers().get("Collision");
+        for (MapObject o : layer.getObjects()) {
+            if (o instanceof RectangleMapObject) {
+                RectangleMapObject rectangleObject = (RectangleMapObject) o;
+
+                // Retrieve the position and size of the collision rectangle
+                float x = rectangleObject.getRectangle().x;
+                float y = rectangleObject.getRectangle().y;
+                float width = rectangleObject.getRectangle().width;
+                float height = rectangleObject.getRectangle().height;
+                if(recOverlap(chicken.getX(), chicken.getY(), chicken.WIDTH, chicken.HEIGHT, x, y, width, height)){
+                    chicken.setX(chicken.getPrev_x());
+                    chicken.setY(chicken.getPrev_y());
+                }
+            }
+        }
         for (int i = 0; i < trashArray.size(); i++) {
             Trash t = trashArray.get(i);
             if (recOverlap(chicken.getX(), chicken.getY(), chicken.WIDTH, chicken.HEIGHT, t.getX(), t.getY(), t.WIDTH, t.HEIGHT)) {
                 if(chicken.canPickUp) {
-                    if (chicken.currentTrash != null) {
-                        trashArray.add(new Trash(t.getX(), t.getY(), t.WIDTH, t.HEIGHT, chicken.currentTrash.TEXTURE, chicken.currentTrash.type));
-                        chicken.canPickUp = false;
-                    }
-
-                    chicken.currentTrash = new Trash(t.getX(), t.getY(), t.WIDTH, t.HEIGHT, t.TEXTURE, t.type, t.name);
+                    chicken.currentTrash = new Trash(t.getX(), t.getY(), t.WIDTH, t.HEIGHT, t.TEXTURE_REGION, t.type, t.mapObject, t.name);
                     trashArray.remove(t);
+                    chicken.canPickUp = false;
                 }
             }
         }
 
-        for (Trash t : kante) {
-            if (recOverlap(chicken.getX(), chicken.getY(), (float) chicken.WIDTH, (float) chicken.HEIGHT / 3, t.getX(), t.getY(), t.WIDTH, t.HEIGHT)) {
+        for (Kanta k : kante) {
+            if (recOverlap(chicken.getX(), chicken.getY(), (float) chicken.WIDTH, (float) chicken.HEIGHT / 3, k.getX(), k.getY(), k.WIDTH, k.HEIGHT)) {
                 chicken.setX(chicken.getPrev_x());
                 chicken.setY(chicken.getPrev_y());
-                if (chicken.currentTrash != null && chicken.currentTrash.type == t.type) {
+                if (chicken.currentTrash != null && chicken.currentTrash.type == k.type) {
                     chicken.currentTrash = null;
+                    chicken.canPickUp = true;
                 } //else izgubi pointe?
-            }
-        }
-        if (!chicken.canPickUp) {
-            chicken.canPickUpTimer += dt;
-            if (chicken.canPickUpTimer >= 1.5f) {
-                chicken.canPickUp = true;
-                chicken.canPickUpTimer = 0.0f;
             }
         }
 
         camera.position.x = chicken.getX() + (float)chicken.WIDTH / 2;
         camera.position.y = chicken.getY() + (float)chicken.HEIGHT / 2;
         camera.update();
+        mapRenderer.setView(camera);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        for(Trash t : kante)
-            batch.draw(t.TEXTURE, t.getX(), t.getY());
+        for (MapLayer mapLayer : map.getLayers()) {
+            if (!mapLayer.getName().equals("trash") && !mapLayer.getName().equals("Collision")) {
+                // Render the map layer
+                if(mapLayer instanceof TiledMapTileLayer) {
+                    mapRenderer.renderTileLayer((TiledMapTileLayer) mapLayer);
+                }
+            }
+        }
+        for(Kanta k : kante)
+            batch.draw(k.TEXTURE, k.getX(), k.getY());
         for(Trash t : trashArray)
-            batch.draw(t.TEXTURE, t.getX(), t.getY());
+            batch.draw(t.TEXTURE_REGION, t.getX(), t.getY());
         if(chicken.moving)
             batch.draw((TextureRegion) chicken.getAnimation().getKeyFrame(chickenSpriteTime, true), chicken.getX(), chicken.getY());
         else
             batch.draw(chicken.getTexture(), chicken.getX(), chicken.getY());
         if(chicken.currentTrash != null){
-            batch.draw(chicken.currentTrash.TEXTURE, chicken.getX()+(chicken.WIDTH*1.3f)/chicken.currentTrash.WIDTH, chicken.getY()+25);
+            batch.draw(chicken.currentTrash.TEXTURE_REGION, chicken.getX()+chicken.WIDTH/chicken.currentTrash.WIDTH, chicken.getY()+chicken.HEIGHT + chicken.HEIGHT/chicken.currentTrash.HEIGHT - 5);
         }
         //if(chicken.currentTrash != null)
         //    font.draw(batch, chicken.currentTrash.name, chicken.getX()-100, chicken.getY()-50);
