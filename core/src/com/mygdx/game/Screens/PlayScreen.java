@@ -47,10 +47,14 @@ public class PlayScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
     private BitmapFont font;
+    private TiledMapTileLayer[] plantLayers;
+    private boolean signCollision;
+    private Texture signTexture;
+    private boolean fullscreen;
     public PlayScreen(ChickenGame game, SpriteBatch batch) {
         this.game = game;
         this.batch = batch;
-        this.chicken = new Chicken(500, 300, new Texture("Chicken/sprite_chicken00.png"), chickenDownWalkAnimation);
+        this.chicken = new Chicken(820, 330, new Texture("Chicken/sprite_chicken00.png"), chickenDownWalkAnimation);
         this.font = new BitmapFont();
         this.chickenSpriteTime = 0;
         this.mapLoader = new TmxMapLoader();
@@ -130,7 +134,8 @@ public class PlayScreen implements Screen {
         //trashArray.add(new Trash(190, 120, 9, 14, new Texture("Trash/bottle_1.png"), 3, "Steklenica vina"));
         //trashArray.add(new Trash(140, 110, 11, 11, new Texture("Trash/paper_0.png"), 0, "Popisan list"));
         //trashArray.add(new Trash(150, 150, 14, 13, new Texture("Trash/bag_0.png"), 1, "Plastična vrečka"));
-
+        signCollision = false;
+        signTexture = new Texture("poster3-2.png");
     }
 
     public void addTrashToArray(MapObject obj, int type){
@@ -158,9 +163,6 @@ public class PlayScreen implements Screen {
         chickenTextures[3] = new Texture("Chicken/sprite_chicken10.png");
         camera = new OrthographicCamera();
         viewport = new FitViewport(512, 360, camera);
-        for(MapLayer ml : map.getLayers()){
-            System.out.println(ml.getName());
-        }
         trashArray = new ArrayList<>();
         String[] layerNames = {"paperTrash", "plastic Trash", "misc Trash", "glass Trash"};
 
@@ -170,14 +172,13 @@ public class PlayScreen implements Screen {
                 addTrashToArray(o, i);
             }
         }
-
-
-        /*for(MapObject obj : layer.getObjects()){
-            System.out.println(obj.getProperties().get("x", float.class));
-            System.out.println(obj.getProperties().get("y", float.class));
-            System.out.println(obj.getProperties().get("width", float.class));
-            System.out.println(obj.getProperties().get("height", float.class));
-        }*/
+        plantLayers = new TiledMapTileLayer[11]; //0th index is empty as layer names start with 01
+        for(int i=1; i<=10; i++){
+            if(i==10)
+                plantLayers[i] = (TiledMapTileLayer) map.getLayers().get("Rastline"+i);
+            else
+                plantLayers[i] = (TiledMapTileLayer) map.getLayers().get("Rastline0"+i);
+        }
     }
 
     public void update(float dt){
@@ -185,6 +186,14 @@ public class PlayScreen implements Screen {
         chicken.setPrev_x(chicken.getX());
         chicken.setPrev_y(chicken.getY());
         //input
+        if (Gdx.input.isKeyPressed(Input.Keys.F)){
+            if (fullscreen) {
+                Gdx.graphics.setWindowedMode(1280, 800); // Set your desired windowed mode dimensions
+            } else {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
+            fullscreen = !fullscreen;
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             chicken.setTexture(chickenTextures[1]);
             chicken.setAnimation(chickenRightWalkAnimation);
@@ -215,31 +224,45 @@ public class PlayScreen implements Screen {
             chicken.setAnimation(chickenRightDownWalkAnimation);
         chicken.moving = (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.D));
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-            chicken.setSpeed(35);
+            chicken.setSpeed(50);
         else
-            chicken.setSpeed(20);
+            chicken.setSpeed(30);
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             dispose();
             game.dispose();
         }
-
+        double minY = 9000;
+        boolean isHigher = false;
         //collisions
         MapLayer layer = map.getLayers().get("Collision");
         for (MapObject o : layer.getObjects()) {
-            if (o instanceof RectangleMapObject) {
-                RectangleMapObject rectangleObject = (RectangleMapObject) o;
-
-                // Retrieve the position and size of the collision rectangle
-                float x = rectangleObject.getRectangle().x;
-                float y = rectangleObject.getRectangle().y;
-                float width = rectangleObject.getRectangle().width;
-                float height = rectangleObject.getRectangle().height;
-                if(recOverlap(chicken.getX(), chicken.getY(), chicken.WIDTH, chicken.HEIGHT, x, y, width, height)){
-                    chicken.setX(chicken.getPrev_x());
-                    chicken.setY(chicken.getPrev_y());
-                }
+            float x = o.getProperties().get("x", float.class);
+            float y = o.getProperties().get("y", float.class);
+            float width = o.getProperties().get("width", float.class);
+            float height = o.getProperties().get("height", float.class);
+            if(recOverlap(chicken.getX()+(float)chicken.WIDTH/2, chicken.getY()-(float)chicken.HEIGHT/8, (float)chicken.WIDTH/2, (float)chicken.HEIGHT/8, x, y, width, height)) {
+                chicken.setX(chicken.getPrev_x());
+                chicken.setY(chicken.getPrev_y());
+            }
+            if(Math.sqrt(Math.pow(chicken.getX() - x, 2) + Math.pow(chicken.getY() - y, 2)) < minY) {
+                minY = Math.sqrt(Math.pow(chicken.getX() - x, 2) + Math.pow(chicken.getY() - y, 2));
+                isHigher = chicken.getY() > y;
             }
         }
+        chicken.isHigher = isHigher;
+        layer = map.getLayers().get("sign collision");
+        MapObject sign = layer.getObjects().get(0);
+        signCollision = false;
+        float x = sign.getProperties().get("x", float.class);
+        float y = sign.getProperties().get("y", float.class);
+        float width = sign.getProperties().get("width", float.class);
+        float height = sign.getProperties().get("height", float.class);
+        if(recOverlap(chicken.getX(), chicken.getY()-(float)chicken.HEIGHT/8, chicken.WIDTH, (float)chicken.HEIGHT/8, x, y, width, height)) {
+            chicken.setX(chicken.getPrev_x());
+            chicken.setY(chicken.getPrev_y());
+            signCollision = true;
+        }
+        //pick up trash
         for (int i = 0; i < trashArray.size(); i++) {
             Trash t = trashArray.get(i);
             if (recOverlap(chicken.getX(), chicken.getY(), chicken.WIDTH, chicken.HEIGHT, t.getX(), t.getY(), t.WIDTH, t.HEIGHT)) {
@@ -258,6 +281,7 @@ public class PlayScreen implements Screen {
                 if (chicken.currentTrash != null && chicken.currentTrash.type == k.type) {
                     chicken.currentTrash = null;
                     chicken.canPickUp = true;
+                    chicken.trashCount++;
                 } //else izgubi pointe?
             }
         }
@@ -276,13 +300,15 @@ public class PlayScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (MapLayer mapLayer : map.getLayers()) {
-            if (!mapLayer.getName().equals("trash") && !mapLayer.getName().equals("Collision")) {
+            if (!mapLayer.getName().equals("trash") && !mapLayer.getName().contains("Rastline")) {
                 // Render the map layer
                 if(mapLayer instanceof TiledMapTileLayer) {
                     mapRenderer.renderTileLayer((TiledMapTileLayer) mapLayer);
                 }
             }
         }
+        if(!chicken.isHigher)
+            mapRenderer.renderTileLayer(plantLayers[chicken.trashCount]);
         for(Kanta k : kante)
             batch.draw(k.TEXTURE, k.getX(), k.getY());
         for(Trash t : trashArray)
@@ -294,9 +320,17 @@ public class PlayScreen implements Screen {
         if(chicken.currentTrash != null){
             batch.draw(chicken.currentTrash.TEXTURE_REGION, chicken.getX()+chicken.WIDTH/chicken.currentTrash.WIDTH, chicken.getY()+chicken.HEIGHT + chicken.HEIGHT/chicken.currentTrash.HEIGHT - 5);
         }
+        if(chicken.isHigher)
+            mapRenderer.renderTileLayer(plantLayers[chicken.trashCount]);
         //if(chicken.currentTrash != null)
         //    font.draw(batch, chicken.currentTrash.name, chicken.getX()-100, chicken.getY()-50);
         batch.end();
+        if(signCollision) {
+            batch.setProjectionMatrix(batch.getProjectionMatrix().setToOrtho2D(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+            batch.begin();
+            batch.draw(signTexture, (float)(Gdx.graphics.getWidth() - 1280)/2, (float)(Gdx.graphics.getHeight() - 800)/2);
+            batch.end();
+        }
         update(delta);
     }
 

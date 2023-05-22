@@ -17,6 +17,8 @@ public class Chicken {
     private float prev_y;
     public boolean canPickUp;
     public float canPickUpTimer;
+    public boolean isHigher; //tells us if the player is higher than the obstacle or not
+    public int trashCount; //tells us how much trash player has sorted correctly; this increases the amount of green plants
 
     public Chicken(float x, float y, Texture texture, Animation animation){
         this.x = x;
@@ -27,6 +29,8 @@ public class Chicken {
         this.moving = false;
         this.canPickUp = true;
         this.canPickUpTimer = 0.0f;
+        this.isHigher = false;
+        this.trashCount = 1;
     }
 
     public Chicken(){}

@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(1280,  800);
 		config.setForegroundFPS(60);
 		config.setTitle("Recycle Chicken");
-		//config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
+		config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		new Lwjgl3Application(new ChickenGame(), config);
 	}
 }
