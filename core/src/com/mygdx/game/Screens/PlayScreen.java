@@ -281,7 +281,8 @@ public class PlayScreen implements Screen {
                 if (chicken.currentTrash != null && chicken.currentTrash.type == k.type) {
                     chicken.currentTrash = null;
                     chicken.canPickUp = true;
-                    chicken.trashCount++;
+                    if(chicken.trashCount < 10)
+                        chicken.trashCount++;
                 } //else izgubi pointe?
             }
         }
