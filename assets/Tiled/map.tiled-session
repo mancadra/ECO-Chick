@@ -1,8 +1,12 @@
 {
-    "activeFile": "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/kante.tsx",
+    "activeFile": "map.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
+        "Collision.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/Design/ECO_Chick_tileset.tsx": {
             "scaleInDock": 1
         },
@@ -74,15 +78,15 @@
         },
         "kante.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 0.75,
             "scaleInEditor": 1
         },
         "map.tmx": {
-            "scale": 5.5,
-            "selectedLayer": 8,
+            "scale": 0.75,
+            "selectedLayer": 17,
             "viewCenter": {
-                "x": 724.3636363636364,
-                "y": 542.1818181818182
+                "x": 732,
+                "y": 317.33333333333326
             }
         },
         "trash01.tsx": {
@@ -107,27 +111,26 @@
     "last.imagePath": "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets",
     "openFiles": [
         "base.tsx",
-        "map.tmx",
         "trash01.tsx",
         "kante.tsx",
+        "map.tmx",
         "trash02.tsx",
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/map.tmx",
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/kante.tsx"
+        "Collision.tsx"
     ],
     "project": "map.tiled-project",
     "recentFiles": [
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_map01.tmx",
+        "base.tsx",
+        "trash01.tsx",
+        "kante.tsx",
+        "Collision.tsx",
         "trash02.tsx",
+        "map.tmx",
+        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_map01.tmx",
         "trash03.tsx",
         "trasshhhhh.tsx",
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/Design/map.tmj",
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/map.tmx",
-        "map.tmx",
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_tileset.tsx",
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/ECO-Chick/assets/ECO_Chick_tileset.tsx",
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/kante.tsx",
-        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/trash.tsx",
-        "base.tsx"
+        "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_tileset.tsx"
     ],
     "tileset.lastUsedFilter": "Tiled tileset files (*.tsx *.xml)",
     "tileset.lastUsedFormat": "tsx",
