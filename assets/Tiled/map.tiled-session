@@ -1,5 +1,5 @@
 {
-    "activeFile": "map.tmx",
+    "activeFile": "trash02.tsx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -73,7 +73,7 @@
         },
         "base.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 3,
             "scaleInEditor": 1
         },
         "kante.tsx": {
@@ -82,20 +82,20 @@
             "scaleInEditor": 1
         },
         "map.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 17,
+            "scale": 1,
+            "selectedLayer": 21,
             "viewCenter": {
-                "x": 732,
-                "y": 317.33333333333326
+                "x": 581,
+                "y": 475
             }
         },
         "trash01.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 3,
             "scaleInEditor": 1
         },
         "trash02.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 1,
+            "scaleInDock": 3,
             "scaleInEditor": 1
         },
         "trash03.tsx": {
@@ -113,18 +113,16 @@
         "base.tsx",
         "trash01.tsx",
         "kante.tsx",
-        "map.tmx",
-        "trash02.tsx",
-        "Collision.tsx"
+        "trash02.tsx"
     ],
     "project": "map.tiled-project",
     "recentFiles": [
         "base.tsx",
         "trash01.tsx",
         "kante.tsx",
-        "Collision.tsx",
         "trash02.tsx",
         "map.tmx",
+        "Collision.tsx",
         "D:/FAKS/4. SEMESTER/OSNOVE OBLIKOVANJA/ECO CHICK/ECO-Chick/assets/ECO_Chick_map01.tmx",
         "trash03.tsx",
         "trasshhhhh.tsx",
