@@ -301,15 +301,17 @@ public class PlayScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         for (MapLayer mapLayer : map.getLayers()) {
-            if (!mapLayer.getName().equals("trash") && !mapLayer.getName().contains("Rastline")) {
+            if (!mapLayer.getName().equals("trash") && !mapLayer.getName().contains("Rastline") && !mapLayer.getName().contains("shape") && !mapLayer.getName().contains("woodenPost")) {
                 // Render the map layer
                 if(mapLayer instanceof TiledMapTileLayer) {
                     mapRenderer.renderTileLayer((TiledMapTileLayer) mapLayer);
                 }
             }
         }
-        if(!chicken.isHigher)
+        if(!chicken.isHigher) {
             mapRenderer.renderTileLayer(plantLayers[chicken.trashCount]);
+            mapRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("woodenPost"));
+        }
         for(Kanta k : kante)
             batch.draw(k.TEXTURE, k.getX(), k.getY());
         for(Trash t : trashArray)
@@ -321,8 +323,10 @@ public class PlayScreen implements Screen {
         if(chicken.currentTrash != null){
             batch.draw(chicken.currentTrash.TEXTURE_REGION, chicken.getX()+chicken.WIDTH/chicken.currentTrash.WIDTH, chicken.getY()+chicken.HEIGHT + chicken.HEIGHT/chicken.currentTrash.HEIGHT - 5);
         }
-        if(chicken.isHigher)
+        if(chicken.isHigher){
             mapRenderer.renderTileLayer(plantLayers[chicken.trashCount]);
+            mapRenderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get("woodenPost"));
+        }
         //if(chicken.currentTrash != null)
         //    font.draw(batch, chicken.currentTrash.name, chicken.getX()-100, chicken.getY()-50);
         batch.end();
